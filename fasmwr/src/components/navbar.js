@@ -14,7 +14,7 @@ const HeaderNav = props => {
             </Nav>
             <Form inline>
                 <div className="pr-2" style={{color:"white", fontSize:"16pt", verticalAlign:"middle"}}>
-                Find a mutual aid!
+                Find a mutual aid near you!
                 </div>
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                 <Button variant="outline-success">Search</Button>
