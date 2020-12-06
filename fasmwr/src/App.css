@@ -1,12 +1,20 @@
-.hv-logo {
-  height: 5em;
-}
-
 /* Nav-Bar */
+.nav-logo {
+ font-size:32pt;
+ color:white;
+}
 .nav-bar-font {
   font-size:24pt;
 }
 
 /* Main template */
 .main-container {
+}
+
+/* Card template */
+.aid-card {
+  transition: transform .2s;
+}
+.aid-card:hover {
+  transform: scale(1.05);
 }
