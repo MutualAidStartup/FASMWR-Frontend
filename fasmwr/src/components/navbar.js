@@ -3,7 +3,7 @@ import {Button, Navbar, Nav, Form, FormControl} from 'react-bootstrap'
 
 const HeaderNav = props => {
     return (
-        <Navbar bg="dark" variant="dark" className="nav-bar-font">
+        <Navbar bg="dark" variant="dark" className="nav-bar-font nav-bar">
             <Nav href="#home" className="nav-logo pr-3">
                 FASMWR
             </Nav>

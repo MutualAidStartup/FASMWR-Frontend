@@ -1,5 +1,7 @@
 import React from "react";
-import {Container, Row, Col, Card, Button, Form, FormControl, InputGroup} from 'react-bootstrap'
+import {Container, Row, Col, Card, Button, Form, FormControl, InputGroup} from 'react-bootstrap';
+import * as $ from 'jquery';
+import {flask_url} from '../App.js';
 
 const Overlay = props => {
     var situation = "";
@@ -45,7 +47,26 @@ const Overlay = props => {
             return;
         }
         //no errors!
-        console.log("submitted!");
+        console.log(situation);
+
+        $.ajax({
+            url: flask_url + "requestAid",
+            type: "GET",
+            data: {
+                'situation':situation,
+                'identity':identity,
+                'requestedAmount':requestedAmount
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: () => {
+                console.log("Successful Post");
+            }
+        });
+
         props.requestAidFunc(null);
     }
 

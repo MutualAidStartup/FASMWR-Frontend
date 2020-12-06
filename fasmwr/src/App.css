@@ -1,4 +1,7 @@
 /* Nav-Bar */
+.nav-bar {
+  height:2em;
+}
 .nav-logo {
  font-size:32pt;
  color:white;
@@ -9,6 +12,14 @@
 
 /* Main template */
 .main-container {
+  height:100%;
+}
+
+.App {
+  height:100%;
+}
+
+html, body {
   height:100%;
 }
 
