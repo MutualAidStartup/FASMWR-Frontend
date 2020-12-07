@@ -1,4 +1,7 @@
 /* Nav-Bar */
+.nav-bar {
+  height:2em;
+}
 .nav-logo {
  font-size:32pt;
  color:white;
@@ -9,6 +12,15 @@
 
 /* Main template */
 .main-container {
+  height:100%;
+}
+
+.App {
+  height:100%;
+}
+
+html, body {
+  height:100%;
 }
 
 /* Card template */
@@ -18,4 +30,14 @@
 .aid-card:hover {
   transform: scale(1.05);
   cursor: pointer;
+}
+
+.overlay-container {
+  background-color: rgba(0,0,0,0.75);
+  display:block;
+  position: absolute;
+  z-index:10;
+  height:100%;
+  left:0;
+  right:0;
 }
