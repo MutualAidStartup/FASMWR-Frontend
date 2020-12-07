@@ -149,7 +149,7 @@ export default class LoggedIn extends React.Component {
 
     render() {
         return (
-            <div>
+            <div style={{height:"100%"}}>
                 <Container className="account-container">
                     <Row />
                     <Row className="mt-3">
@@ -197,6 +197,30 @@ export default class LoggedIn extends React.Component {
                             </Form.Group>
                         </Col>
                     </Row>
+                    <Row/>
+                </Container>
+                <Container className="account-container mt-5">
+                    <Row/>
+                    <Row className="mt-3">
+                        <Col sm="1" />
+                        <Col>
+                            <h1>Active Requests</h1>
+                        </Col>
+                        <Col sm="1" />
+                    </Row>
+                    {/* Example request */}
+                    <Row className="mx-5 my-3" >
+                        <Col>
+                            Situation
+                        </Col>
+                        <Col>
+                            Identities
+                        </Col>
+                        <Col>
+                            Requested Amount
+                        </Col>
+                    </Row>
+                    {this.state.requests}
                     <Row/>
                 </Container>
             </div>

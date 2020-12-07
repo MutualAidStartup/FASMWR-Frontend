@@ -36,18 +36,18 @@ export default class Visitor extends React.Component{
             success: (data) => {
                 //got the card data, not iterate through and add to the var
                 console.log(data);
-                for (var cardItem in data)
+                for (var counter=0;counter<data["cards"].length;counter++)
                 {
-                    var card = data[cardItem];
-                    console.log(card[0].name);
+                    var card = data["cards"][counter];
+                    console.log(card.name);
                     cardListTemp.push(
-                        <Col className="ml-5 my-3" sm={2}>
+                        <Col className="ml-5 my-3" style={{minWidth:"250px"}} sm={2}>
                             <CardElement
-                            id={card[0].id}
-                            logo={card[0].logo}
-                            title={card[0].name}
-                            text={card[0].description}
-                            link={card[0].link}
+                            id={card.id}
+                            logo={card.logo}
+                            title={card.name}
+                            text={card.description}
+                            link={card.link}
                             //this will later be changed to send over the id, but for now it is 0001 since everything is hardcoded and not through the db
                             changeCardFunc={this.props.changeCardFunc}
                             />
@@ -57,7 +57,7 @@ export default class Visitor extends React.Component{
                 this.setState({
                     cardList: cardListTemp
                 })
-                console.log(this.cardList);
+                console.log(this.state.cardList);
             }
         });
     }
@@ -65,7 +65,7 @@ export default class Visitor extends React.Component{
     render() {
         return (
             <Row>
-                <Col className="ml-5 my-3" sm={2}>
+                <Col className="ml-5 my-3" style={{minWidth:"250px"}} sm={2}>
                     {/* In the future, change this to display different mutual aids, for now have it just hardcoded */}
                     <CardElement
                         // As of now my plan is to change it so it only passes the id, and the cardelement.js handles the database query
