@@ -54,9 +54,10 @@ const Overlay = props => {
             url: flask_url + "requestAid",
             type: "GET",
             data: {
+                'user_id':props.id,
                 'situation':situation,
-                'identity':identity,
-                'requestedAmount':requestedAmount
+                'identities':identity,
+                'amount':requestedAmount
             },
             error: function (response) {
                 alert(response.statusText);

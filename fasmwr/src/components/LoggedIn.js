@@ -21,6 +21,7 @@ export default class LoggedIn extends React.Component {
             location: "",
             link: "",
             image: "",
+            requests: [],
         }
         this.getAccountData = this.getAccountData.bind(this);
         this.updateName = this.updateName.bind(this);
@@ -41,12 +42,59 @@ export default class LoggedIn extends React.Component {
                 id: this.props.id
             });
             this.getAccountData(_token, this.props.id);
+            this.getRequestData(this.props.id);
         }
         else {
             console.log("Bad Token");
             alert("Bad Token - Logged Out");
             this.props.setLoggedIn(null);
         }
+    }
+
+    getRequestData(id) {
+        //on load, create the cards that will be printed
+        var requestsTemp = [];
+        //get the cards from db
+        
+        $.ajax({
+            url: flask_url + "view_requests",
+            type: "GET",
+            data: {
+                'user_id': id,
+                'num_requests':3
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                //got the card data, not iterate through and add to the var
+                console.log(data);
+                for (var counter=0;counter<data["request"].length;counter++)
+                {
+                    var requestObj = data["request"][counter];
+                    console.log(requestObj.situation);
+                    requestsTemp.push(
+                        <Row className="mx-5 my-3" >
+                            <Col>
+                                {requestObj.situation}
+                            </Col>
+                            <Col>
+                                {requestObj.identities}
+                            </Col>
+                            <Col>
+                                {requestObj.amount}
+                            </Col>
+                        </Row>
+                    );
+                }
+                this.setState({
+                    requests: requestsTemp
+                })
+                console.log(this.state.requests);
+            }
+        });
     }
 
     getAccountData(_token, id) {
