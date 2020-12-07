@@ -145,8 +145,8 @@ export class HeaderNav extends React.Component {
                             FASMWR
                     </Nav>
                         <Nav className="mr-auto">
-                            <Nav.Link href="#account">Account</Nav.Link>
-                            <Nav.Link href="#requests">Requests</Nav.Link>
+                            <Nav.Link href="#account" onClick={() => this.props.changePage("account")}>Account</Nav.Link>
+                            <Nav.Link href="#requests" onClick={() => this.props.changePage("requests")}>Requests</Nav.Link>
                         </Nav>
                         <Form inline className="ml-4">
                             <Button variant="outline-success" className="mr-5" onClick={() => this.logout()}>Logout</Button>

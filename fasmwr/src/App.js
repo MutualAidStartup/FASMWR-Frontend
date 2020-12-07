@@ -23,12 +23,14 @@ export default class App extends React.Component {
       token: null,
       active_card: null,
       request_aid: null,
+      page: null,
     };
     this.changeCard = this.changeCard.bind(this);
     this.requestAid = this.requestAid.bind(this);
     this.setLoggedIn = this.setLoggedIn.bind(this);
     this.changeToken = this.changeToken.bind(this);
     this.changeId = this.changeId.bind(this);
+    this.changePage = this.changePage.bind(this);
   }
 
   setLoggedIn(value) {
@@ -67,6 +69,13 @@ export default class App extends React.Component {
     console.log("Changed token to "+value)
   }
 
+  changePage(value) {
+    this.setState({
+      page: value,
+    })
+    console.log("Changed page to "+value)
+  }
+
   render() {
     return (
       <div className="App">
@@ -75,6 +84,7 @@ export default class App extends React.Component {
           setLoggedIn={this.setLoggedIn}
           changeToken={this.changeToken}
           changeId={this.changeId}
+          changePage={this.changePage}
         />
         {this.state.active_card && !this.state.request_aid && (
           <Overlay
@@ -124,6 +134,7 @@ export default class App extends React.Component {
             <LoggedIn 
               id={this.state.id}
               token={this.state.token}
+              page={this.state.page}
             />
           )}
         </Container>

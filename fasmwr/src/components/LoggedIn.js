@@ -76,7 +76,7 @@ export default class LoggedIn extends React.Component {
                     var requestObj = data["request"][counter];
                     console.log(requestObj.situation);
                     requestsTemp.push(
-                        <Row className="mx-5 my-3" >
+                        <Row className="mx-5 my-3" style={{backgroundColor:"#555555"}}>
                             <Col>
                                 {requestObj.situation}
                             </Col>
@@ -85,6 +85,16 @@ export default class LoggedIn extends React.Component {
                             </Col>
                             <Col>
                                 {requestObj.amount}
+                            </Col>
+                            <Col>
+                                <Button type="grant_request" style={{float:"right"}} variant="success">
+                                    Grant
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Button type="deny_request" style={{float:"right"}} variant="danger">
+                                    Deny
+                                </Button>
                             </Col>
                         </Row>
                     );
@@ -198,79 +208,89 @@ export default class LoggedIn extends React.Component {
     render() {
         return (
             <div style={{height:"100%"}}>
-                <Container className="account-container">
-                    <Row />
-                    <Row className="mt-3">
-                        <Col sm="1" />
-                        <Col>
-                            <h1>Modify your Mutual Aid project!</h1>
-                        </Col>
-                        <Col style={{ float: "right", verticalAlign: "center" }} xs={1}>
-                            <Button type="submit" className="mt-2" style={{ float: "right" }} variant="primary" onClick={() => this.submit()}>Update</Button>
-                        </Col>
-                        <Col sm="1" />
-                    </Row>
-                    <Row className="mx-5 my-3" >
-                        <Col>
-                            <Form.Label>Organization Name</Form.Label>
-                            <Form.Control id="org_name" value={this.state.name} onChange={() => this.updateName()} />
-                        </Col>
-                        <Col>
-                            <Form.Label>E-mail</Form.Label>
-                            <Form.Control id="org_email" value={this.state.email} onChange={() => this.updateEmail()} />
-                        </Col>
-                        <Col>
-                            <Form.Label>Location</Form.Label>
-                            <Form.Control id="org_loc" value={this.state.location} onChange={() => this.updateLocation()} />
-                        </Col>
-                    </Row>
-                    <Row className="mx-5 my-3" >
-                        <Col sm="4">
-                            <Form.Label>Link/URL</Form.Label>
-                            <Form.Control id="org_link" value={this.state.link} onChange={() => this.updateLink()} />
-                        </Col>
-                    </Row>
-                    <Row className="mx-5 my-3">
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control id="desc_text" as="textarea" rows={3} value={this.state.description} onChange={() => this.updateDesc()} />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="mx-5 my-3">
-                        <Col>
-                            <Form.Group>
-                                <Form.File id="image_form" label="Organization Image" onChange={() => this.updatePhoto()}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row/>
-                </Container>
-                <Container className="account-container mt-5">
-                    <Row/>
-                    <Row className="mt-3">
-                        <Col sm="1" />
-                        <Col>
-                            <h1>Active Requests</h1>
-                        </Col>
-                        <Col sm="1" />
-                    </Row>
-                    {/* Example request */}
-                    <Row className="mx-5 my-3" >
-                        <Col>
-                            Situation
-                        </Col>
-                        <Col>
-                            Identities
-                        </Col>
-                        <Col>
-                            Requested Amount
-                        </Col>
-                    </Row>
-                    {this.state.requests}
-                    <Row/>
-                </Container>
+                {this.props.page === "account" && (
+                    <Container className="account-container">
+                        <Row />
+                        <Row className="mt-3">
+                            <Col sm="1" />
+                            <Col>
+                                <h1>Modify your Mutual Aid project!</h1>
+                            </Col>
+                            <Col style={{ float: "right", verticalAlign: "center" }} xs={1}>
+                                <Button type="submit" className="mt-2" style={{ float: "right" }} variant="primary" onClick={() => this.submit()}>Update</Button>
+                            </Col>
+                            <Col sm="1" />
+                        </Row>
+                        <Row className="mx-5 my-3" >
+                            <Col>
+                                <Form.Label>Organization Name</Form.Label>
+                                <Form.Control id="org_name" value={this.state.name} onChange={() => this.updateName()} />
+                            </Col>
+                            <Col>
+                                <Form.Label>E-mail</Form.Label>
+                                <Form.Control id="org_email" value={this.state.email} onChange={() => this.updateEmail()} />
+                            </Col>
+                            <Col>
+                                <Form.Label>Location</Form.Label>
+                                <Form.Control id="org_loc" value={this.state.location} onChange={() => this.updateLocation()} />
+                            </Col>
+                        </Row>
+                        <Row className="mx-5 my-3" >
+                            <Col sm="4">
+                                <Form.Label>Link/URL</Form.Label>
+                                <Form.Control id="org_link" value={this.state.link} onChange={() => this.updateLink()} />
+                            </Col>
+                        </Row>
+                        <Row className="mx-5 my-3">
+                            <Col>
+                                <Form.Group>
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control id="desc_text" as="textarea" rows={3} value={this.state.description} onChange={() => this.updateDesc()} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row className="mx-5 my-3">
+                            <Col>
+                                <Form.Group>
+                                    <Form.File id="image_form" label="Organization Image" onChange={() => this.updatePhoto()}/>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row/>
+                    </Container>
+                )}
+                {this.props.page === "requests" && (
+                    <Container className="account-container mt-5">
+                        <Row/>
+                        <Row className="mt-3">
+                            <Col sm="1" />
+                            <Col>
+                                <h1>Active Requests</h1>
+                            </Col>
+                            <Col>
+                                <h3 style={{float:"right"}}>Current Balance: <span id="balance">00.00</span></h3>
+                            </Col>
+                            <Col sm="1" />
+                        </Row>
+                        {/* Example request */}
+                        <Row className="mx-5 my-3" >
+                            <Col>
+                                Situation
+                            </Col>
+                            <Col>
+                                Identities
+                            </Col>
+                            <Col>
+                                Requested Amount
+                            </Col>
+                            <Col sm={5} style={{textAlign:"right"}}>
+                                Options
+                            </Col>
+                        </Row>
+                        {this.state.requests}
+                        <Row/>
+                    </Container>
+                )}
             </div>
         );
     }
