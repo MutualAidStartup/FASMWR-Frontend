@@ -140,7 +140,8 @@ export default class LoggedIn extends React.Component {
                 console.log(response.statusText);
                 console.log("failed");
             },
-            success: () => {
+            success: (data) => {
+                alert(data);
                 console.log("Successful Post");
             }
         });
