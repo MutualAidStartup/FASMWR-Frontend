@@ -15,6 +15,11 @@
   height:100%;
 }
 
+.account-container {
+  min-width:50%;
+  background-color:#444444;
+}
+
 .App {
   height:100%;
 }

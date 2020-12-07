@@ -102,7 +102,7 @@ const Overlay = props => {
                                         <InputGroup.Prepend>
                                         <InputGroup.Text>$</InputGroup.Text>
                                         </InputGroup.Prepend>
-                                        <FormControl id="requested_amount" placeholder="Requested Amount" onChange={() => updateRequestAmount()} />
+                                        <Form.Control id="requested_amount" placeholder="Requested Amount" onChange={() => updateRequestAmount()} />
                                     </InputGroup>
                                 </Form.Row>
                                 <Form.Row>
