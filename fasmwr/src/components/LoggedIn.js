@@ -49,6 +49,12 @@ export default class LoggedIn extends React.Component{
             <div>
                 <Row>
                     <Col className="ml-5 my-3 ">
+                        Modify your Mutual Aid project!
+                        <Button/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="ml-5 my-3 ">
                         {/* In the future, change this to display your mutual aid, for now have it just hardcoded */}
                         {this.state.name}
                     </Col>
