@@ -3,7 +3,7 @@ import {Button, Card} from 'react-bootstrap'
 
 const CardElement = props => {
     return (
-        <Card style={{ width: '18rem' }} className="aid-card" onClick={ () => props.changeCardFunc("0001")}>
+        <Card style={{ width: '18rem' }} className="aid-card" onClick={ () => props.changeCardFunc(props.id)}>
             <Card.Img variant="top" src={props.logo} />
             <Card.Body>
                 <Card.Title> {props.title}</Card.Title>

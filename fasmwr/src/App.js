@@ -38,11 +38,11 @@ export default class App extends React.Component {
     console.log("login success");
   }
 
-  changeCard(active_card) {
+  changeCard(new_active_card) {
     this.setState({
-      active_card: active_card
+      active_card: new_active_card
     });
-    console.log("Set state to "+active_card);
+    console.log("Set state to "+ new_active_card);
   }
 
   //set the request_aid state to the id of mutual aid that is being requested
@@ -78,12 +78,7 @@ export default class App extends React.Component {
         />
         {this.state.active_card && !this.state.request_aid && (
           <Overlay
-            id={'0001'}
-            // As of now my plan is to change it so it only passes the id, and the cardelement.js handles the database query
-            logo={logo}
-            title={"Happy Valley Mutual Aid"}
-            text={"Neighborhood-based, volunteer-run mutual aid org in Bellingham, WA. On the land of the Lummi and Nooksack Nations. Donations are not tax-deductible."}
-            link={"linktr.ee/hvma"}
+            id={this.state.active_card}
             changeCardFunc={this.changeCard}
             requestAidFunc={this.requestAid}
           />

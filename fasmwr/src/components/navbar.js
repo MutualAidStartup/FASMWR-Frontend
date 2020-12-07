@@ -76,8 +76,8 @@ export class HeaderNav extends React.Component {
             success: (data) => {
                 console.log("Successful GET: ");
                 console.log(data);
-                this.props.changeToken(data.token);
                 this.props.changeId(data.id);
+                this.props.changeToken(data.token);
                 this.setLoginOrRegister(null);
             }
         });
