@@ -95,12 +95,9 @@ export default class App extends React.Component {
         )}
         {this.state.request_aid && (
           <RequestOverlay 
-            id={'0001'}
+            id={this.state.request_aid}
             // As of now my plan is to change it so it only passes the id, and the cardelement.js handles the database query
             logo={logo}
-            title={"Happy Valley Mutual Aid"}
-            text={"Neighborhood-based, volunteer-run mutual aid org in Bellingham, WA. On the land of the Lummi and Nooksack Nations. Donations are not tax-deductible."}
-            link={"linktr.ee/hvma"}
             changeCardFunc={this.changeCard}
             requestAidFunc={this.requestAid}
           />

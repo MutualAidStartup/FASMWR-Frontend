@@ -79,6 +79,7 @@ export class HeaderNav extends React.Component {
                 this.props.changeId(data.id);
                 this.props.changeToken(data.token);
                 this.setLoginOrRegister(null);
+                this.props.changePage("account");
             }
         });
     }
