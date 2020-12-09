@@ -7,7 +7,7 @@ import { flask_url } from '../App.js';
 import '../App.css';
 
 // Import bootstrap items
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Row, Col, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
 
 export default class LoggedIn extends React.Component {
     constructor(props) {
@@ -22,6 +22,7 @@ export default class LoggedIn extends React.Component {
             link: "",
             image: "",
             requests: [],
+            linked: null //this will hold the auth tocken when not null, if null they are not verified.  On page load we will most likely need to check if the token is still valid by doing a redundant query with it then tossing the info
         }
         this.getAccountData = this.getAccountData.bind(this);
         this.updateName = this.updateName.bind(this);
@@ -236,7 +237,12 @@ export default class LoggedIn extends React.Component {
                             <Row className="mx-5 my-3" >
                                 <Col sm="4">
                                     <Form.Label>Link/URL</Form.Label>
-                                    <Form.Control id="org_link" value={this.state.link} onChange={() => this.updateLink()} />
+                                    <InputGroup>
+                                        <InputGroup.Prepend>
+                                        <InputGroup.Text>https://</InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                        <Form.Control id="org_link" value={this.state.link} onChange={() => this.updateLink()} />
+                                    </InputGroup>
                                 </Col>
                             </Row>
                             <Row className="mx-5 my-3">
@@ -289,10 +295,29 @@ export default class LoggedIn extends React.Component {
                             <Row />
                         </Col>
                     )}
-                    <Col sm={2} className="account-container-venmo mr-5 ml-5" style={{ float: "right" }}>
-                        <h2>Link your Venmo Account</h2>
-
-                    </Col>
+                    {!this.props.linked && (
+                        <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
+                            <h2 className="mt-2">Link your Venmo Account</h2>
+                            <Form.Group className="mx-2">
+                                <Form.Row style={{width:"60%"}}>
+                                    <Form.Label>Email Address</Form.Label>
+                                    <FormControl id="identity_text" placeholder="Email Address" onChange={() => this.updateUsername()} />
+                                </Form.Row>
+                                <Form.Row style={{width:"60%"}} className="mt-2">
+                                    <Form.Label>Password</Form.Label>
+                                    <FormControl id="identity_text" placeholder="Password" onChange={() => this.updatePassword()} />
+                                </Form.Row>
+                                <Form.Row style={{width:"60%"}} className="mt-3">
+                                    <Button variant="success" className="mr-5" onClick={() => this.loginVenmo()}>Login</Button>
+                                </Form.Row>
+                            </Form.Group>
+                        </Col>
+                    )}
+                    {this.props.linked && (
+                        <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
+                            <h2 className="mt-2">Your account is linked!</h2>
+                        </Col>
+                    )}
                 </Row>
             </div>
         );

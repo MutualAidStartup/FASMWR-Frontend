@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Navbar, Nav, Form, FormControl, Container, Row, Col, Card } from 'react-bootstrap';
 import * as $ from 'jquery';
-import {flask_url} from '../App.js';
+import { flask_url } from '../App.js';
 
 export class HeaderNav extends React.Component {
     constructor(props) {
@@ -47,14 +47,12 @@ export class HeaderNav extends React.Component {
     }
 
     submit() {
-        if(this.state.email === null || this.state.email === "")
-        {
+        if (this.state.email === null || this.state.email === "") {
             // situation was not filled
             console.log("username was not filled");
             return;
         }
-        if(this.state.password === null || this.state.password === "")
-        {
+        if (this.state.password === null || this.state.password === "") {
             //identity was not filled
             console.log("password was not filled");
             return;
@@ -65,8 +63,8 @@ export class HeaderNav extends React.Component {
             url: flask_url + this.state.loginOrRegister,
             type: "GET",
             data: {
-                'email':this.state.email,
-                'password':this.state.password
+                'email': this.state.email,
+                'password': this.state.password
             },
             error: function (response) {
                 alert(response.statusText);
@@ -79,7 +77,7 @@ export class HeaderNav extends React.Component {
                 this.props.changeId(data.id);
                 this.props.changeToken(data.token);
                 this.setLoginOrRegister(null);
-                this.props.changePage("account");
+                this.props.changePage("requests");
             }
         });
     }
@@ -125,13 +123,13 @@ export class HeaderNav extends React.Component {
                     </Nav>
                         <Nav className="mr-auto">
                             <Nav.Link href="#home">Home</Nav.Link>
-                            <Nav.Link href="#about">About</Nav.Link>
+                            <Nav.Link href="#Request_Status">Request Status</Nav.Link>
                         </Nav>
                         <Form inline>
                             <div className="pr-2" style={{ color: "white", fontSize: "16pt", verticalAlign: "middle" }}>
                                 Find a mutual aid near you!
-                        </div>
-                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+                            </div>
+                            <FormControl type="text" placeholder="Location" className="mr-sm-2" />
                             <Button variant="outline-success">Search</Button>
                         </Form>
                         <Form inline className="ml-4">
@@ -146,8 +144,8 @@ export class HeaderNav extends React.Component {
                             FASMWR
                     </Nav>
                         <Nav className="mr-auto">
-                            <Nav.Link href="#account" onClick={() => this.props.changePage("account")}>Account</Nav.Link>
                             <Nav.Link href="#requests" onClick={() => this.props.changePage("requests")}>Requests</Nav.Link>
+                            <Nav.Link href="#account" onClick={() => this.props.changePage("account")}>Account</Nav.Link>
                         </Nav>
                         <Form inline className="ml-4">
                             <Button variant="outline-success" className="mr-5" onClick={() => this.logout()}>Logout</Button>

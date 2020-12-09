@@ -39,7 +39,7 @@ export default class Visitor extends React.Component{
                 for (var counter=0;counter<data["cards"].length;counter++)
                 {
                     var card = data["cards"][counter];
-                    console.log(card.name);
+                    console.log(card.link);
                     cardListTemp.push(
                         <Col className="ml-5 my-3" style={{minWidth:"250px"}} sm={2}>
                             <CardElement

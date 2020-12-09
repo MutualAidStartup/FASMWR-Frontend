@@ -10,7 +10,9 @@ const CardElement = props => {
                 <Card.Text>
                     {props.text}
                 </Card.Text>
-                <Button variant="primary" href={"http://"+props.link}>{props.link}</Button>
+                {!props.link==="" && (
+                    <Button variant="primary" href={"http://"+props.link}>{props.link}</Button>
+                )}
             </Card.Body>
         </Card>
     )

@@ -63,8 +63,10 @@ render() {
                             <Card.Text>
                                 {this.state.text}
                             </Card.Text>
-                            <Button variant="primary" href={"http://" + this.state.link}>{this.state.link}</Button>
-                            <Button className="ml-3" variant="primary" onClick={() => this.props.requestAidFunc(this.state.id)}>Request Aid</Button>
+                            {!this.state.link==="" &&(
+                                <Button variant="primary" className="mr-3" href={"http://" + this.state.link}>{this.state.link}</Button>
+                            )}
+                            <Button className="" variant="primary" onClick={() => this.props.requestAidFunc(this.state.id)}>Request Aid</Button>
                         </Card.Body>
                     </Card>
                 </Col>

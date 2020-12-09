@@ -23,6 +23,7 @@
 
 .account-container-venmo {
   min-width:20%;
+  max-height:20%;
   min-height: 60%;
   background-color:#5f5f5f;
 }
