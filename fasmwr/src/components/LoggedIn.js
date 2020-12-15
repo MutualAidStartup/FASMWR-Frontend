@@ -5,6 +5,8 @@ import React from 'react';
 import * as $ from 'jquery';
 import { flask_url } from '../App.js';
 import '../App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 
 // Import bootstrap items
 import { Row, Col, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
@@ -149,6 +151,7 @@ export default class LoggedIn extends React.Component {
                     image: data.image,
                     venmoToken: data.venmoToken,
                 });
+                this.getProfile();
             }
         });
     }
@@ -244,7 +247,7 @@ export default class LoggedIn extends React.Component {
             data: {
                 'username': this.state.venmoUsername,
                 'password': this.state.venmoPassword,
-                'token' : this.state.token,
+                'token': this.state.token,
                 'userId': this.state.id
             },
             error: function (response) {
@@ -277,7 +280,7 @@ export default class LoggedIn extends React.Component {
             url: flask_url + "verifyVenmoCode",
             type: "GET",
             data: {
-                'token' : this.state.token,
+                'token': this.state.token,
                 'userId': this.state.id,
                 'code': this.state.venmoCode,
                 'otp_secret': this.state.otp_secret
@@ -306,7 +309,7 @@ export default class LoggedIn extends React.Component {
             url: flask_url + "venmoLogOut",
             type: "GET",
             data: {
-                'token' : this.state.token,
+                'token': this.state.token,
                 'userId': this.state.id,
                 'code': this.state.venmoToken,
             },
@@ -327,6 +330,8 @@ export default class LoggedIn extends React.Component {
             url: flask_url + "getVenmoProfile",
             type: "GET",
             data: {
+                'userId': this.state.id,
+                'token': this.state.token,
                 'venmo_token': this.state.venmoToken,
             },
             error: function (response) {
@@ -378,7 +383,7 @@ export default class LoggedIn extends React.Component {
                                     <Form.Label>Link/URL</Form.Label>
                                     <InputGroup>
                                         <InputGroup.Prepend>
-                                        <InputGroup.Text>https://</InputGroup.Text>
+                                            <InputGroup.Text>https://</InputGroup.Text>
                                         </InputGroup.Prepend>
                                         <Form.Control id="org_link" value={this.state.link} onChange={() => this.updateLink()} />
                                     </InputGroup>
@@ -405,15 +410,16 @@ export default class LoggedIn extends React.Component {
                     {this.props.page === "requests" && (
                         <Col className="account-container ml-5">
                             <Row />
-                            <Row className="mt-3">
-                                <Col sm="1" />
+                            <Row className="mt-3 mx-5">
                                 <Col>
                                     <h1>Active Requests</h1>
                                 </Col>
                                 <Col>
                                     <h3 style={{ float: "right" }}>Current Balance: {this.state.balance}</h3>
                                 </Col>
-                                <Col sm="1" />
+                                <Col sm="1.5">
+                                    <Button style={{ float: "right" }} onClick={() => this.getProfile()}><FontAwesomeIcon icon={faSync} /> Refresh</Button>
+                                </Col>
                             </Row>
                             {/* Example request */}
                             <Row className="mx-5 my-3" >
@@ -440,26 +446,26 @@ export default class LoggedIn extends React.Component {
                                 <h2 className="mt-2">Link your Venmo Account</h2>
                                 {!this.state.two_factor && (
                                     <Form.Group className="mx-2">
-                                        <Form.Row style={{width:"60%"}}>
+                                        <Form.Row style={{ width: "60%" }}>
                                             <Form.Label>Email Address</Form.Label>
                                             <FormControl id="username" placeholder="Email Address" onChange={() => this.updateUsername()} />
                                         </Form.Row>
-                                        <Form.Row style={{width:"60%"}} className="mt-2">
+                                        <Form.Row style={{ width: "60%" }} className="mt-2">
                                             <Form.Label>Password</Form.Label>
                                             <FormControl id="password" type="password" placeholder="Password" onChange={() => this.updatePassword()} />
                                         </Form.Row>
-                                        <Form.Row style={{width:"60%"}} className="mt-3">
+                                        <Form.Row style={{ width: "60%" }} className="mt-3">
                                             <Button variant="success" className="mr-5" onClick={() => this.loginVenmo()}>Login</Button>
                                         </Form.Row>
                                     </Form.Group>
                                 )}
                                 {this.state.two_factor && (
                                     <Form.Group className="mx-2">
-                                        <Form.Row style={{width:"60%"}}>
+                                        <Form.Row style={{ width: "60%" }}>
                                             <Form.Label>Enter the code sent to your phone</Form.Label>
                                             <FormControl id="code" placeholder="Code" onChange={() => this.updateCode()} />
                                         </Form.Row>
-                                        <Form.Row style={{width:"60%"}} className="mt-3">
+                                        <Form.Row style={{ width: "60%" }} className="mt-3">
                                             <Button variant="success" className="mr-5" onClick={() => this.submitCode()}>Submit</Button>
                                         </Form.Row>
                                     </Form.Group>
@@ -477,9 +483,6 @@ export default class LoggedIn extends React.Component {
                 <Row>
                     <Col>
                         venmo token: {this.state.venmoToken}
-                    </Col>
-                    <Col>
-                            <Button onClick={() => this.getProfile()}>Get Profile</Button>
                     </Col>
                 </Row>
             </div>
