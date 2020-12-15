@@ -104,7 +104,7 @@ export class HeaderNav extends React.Component {
                                             </Form.Row>
                                             <Form.Row className="ml-0 mt-1" style={{ width: "50%" }}>
                                                 <Form.Label>Password</Form.Label>
-                                                <FormControl id="password_entry" onChange={() => this.updatePassword()} />
+                                                <FormControl id="password_entry" type="password" onChange={() => this.updatePassword()} />
                                             </Form.Row>
                                             <Form.Row>
                                                 <Button className="mt-2 ml-1 " type="submit" variant="primary" onClick={() => this.submit()}>{this.state.loginOrRegister}</Button>
