@@ -23,12 +23,15 @@ export default class LoggedIn extends React.Component {
             image: "",
             requests: [],
             linked: null, //this will hold the auth tocken when not null, if null they are not verified.  On page load we will most likely need to check if the token is still valid by doing a redundant query with it then tossing the info
+            //VENMO
             venmoUsername: null,
             venmoPassword: null,
             venmoToken: null,
             two_factor: null,
             venmoCode: "",
             otp_secret: null,
+            //VENMO PROFILE
+            balance: '00.00'
         }
         this.getAccountData = this.getAccountData.bind(this);
         this.updateName = this.updateName.bind(this);
@@ -43,6 +46,8 @@ export default class LoggedIn extends React.Component {
         this.updatePassword = this.updatePassword.bind(this);
         this.updateCode = this.updateCode.bind(this);
         this.submitCode = this.submitCode.bind(this);
+        this.unlinkVenmo = this.unlinkVenmo.bind(this);
+        this.getProfile = this.getProfile.bind(this);
     }
 
     componentDidMount() {
@@ -292,6 +297,53 @@ export default class LoggedIn extends React.Component {
         })
     }
 
+    unlinkVenmo() {
+        this.setState({
+            venmoToken: null,
+            two_factor: null,
+        });
+        $.ajax({
+            url: flask_url + "venmoLogOut",
+            type: "GET",
+            data: {
+                'token' : this.state.token,
+                'userId': this.state.id,
+                'code': this.state.venmoToken,
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                console.log(data);
+                console.log("Successful verification return");
+            }
+        });
+    }
+
+    getProfile() {
+        $.ajax({
+            url: flask_url + "getVenmoProfile",
+            type: "GET",
+            data: {
+                'venmo_token': this.state.venmoToken,
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                console.log(data);
+                console.log("Successful verification return");
+                this.setState({
+                    balance: data.venmo_balance
+                })
+            }
+        });
+    }
+
     render() {
         return (
             <div style={{ height: "100%" }}>
@@ -359,7 +411,7 @@ export default class LoggedIn extends React.Component {
                                     <h1>Active Requests</h1>
                                 </Col>
                                 <Col>
-                                    <h3 style={{ float: "right" }}>Current Balance: <span id="balance">00.00</span></h3>
+                                    <h3 style={{ float: "right" }}>Current Balance: {this.state.balance}</h3>
                                 </Col>
                                 <Col sm="1" />
                             </Row>
@@ -382,45 +434,53 @@ export default class LoggedIn extends React.Component {
                             <Row />
                         </Col>
                     )}
-                    {!this.state.venmoToken && (
-                        <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
-                            <h2 className="mt-2">Link your Venmo Account</h2>
-                            {!this.state.two_factor && (
-                                <Form.Group className="mx-2">
-                                    <Form.Row style={{width:"60%"}}>
-                                        <Form.Label>Email Address</Form.Label>
-                                        <FormControl id="username" placeholder="Email Address" onChange={() => this.updateUsername()} />
-                                    </Form.Row>
-                                    <Form.Row style={{width:"60%"}} className="mt-2">
-                                        <Form.Label>Password</Form.Label>
-                                        <FormControl id="password" type="password" placeholder="Password" onChange={() => this.updatePassword()} />
-                                    </Form.Row>
-                                    <Form.Row style={{width:"60%"}} className="mt-3">
-                                        <Button variant="success" className="mr-5" onClick={() => this.loginVenmo()}>Login</Button>
-                                    </Form.Row>
-                                </Form.Group>
-                            )}
-                            {this.state.two_factor && (
-                                <Form.Group className="mx-2">
-                                    <Form.Row style={{width:"60%"}}>
-                                        <Form.Label>Enter the code sent to your phone</Form.Label>
-                                        <FormControl id="code" placeholder="Code" onChange={() => this.updateCode()} />
-                                    </Form.Row>
-                                    <Form.Row style={{width:"60%"}} className="mt-3">
-                                        <Button variant="success" className="mr-5" onClick={() => this.submitCode()}>Submit</Button>
-                                    </Form.Row>
-                                </Form.Group>
-                            )}
-                        </Col>
-                    )}
-                    {this.state.venmoToken && (
-                        <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
-                            <h2 className="mt-2">Your account is linked!</h2>
-                        </Col>
-                    )}
+                    <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
+                        {!this.state.venmoToken && (
+                            <div>
+                                <h2 className="mt-2">Link your Venmo Account</h2>
+                                {!this.state.two_factor && (
+                                    <Form.Group className="mx-2">
+                                        <Form.Row style={{width:"60%"}}>
+                                            <Form.Label>Email Address</Form.Label>
+                                            <FormControl id="username" placeholder="Email Address" onChange={() => this.updateUsername()} />
+                                        </Form.Row>
+                                        <Form.Row style={{width:"60%"}} className="mt-2">
+                                            <Form.Label>Password</Form.Label>
+                                            <FormControl id="password" type="password" placeholder="Password" onChange={() => this.updatePassword()} />
+                                        </Form.Row>
+                                        <Form.Row style={{width:"60%"}} className="mt-3">
+                                            <Button variant="success" className="mr-5" onClick={() => this.loginVenmo()}>Login</Button>
+                                        </Form.Row>
+                                    </Form.Group>
+                                )}
+                                {this.state.two_factor && (
+                                    <Form.Group className="mx-2">
+                                        <Form.Row style={{width:"60%"}}>
+                                            <Form.Label>Enter the code sent to your phone</Form.Label>
+                                            <FormControl id="code" placeholder="Code" onChange={() => this.updateCode()} />
+                                        </Form.Row>
+                                        <Form.Row style={{width:"60%"}} className="mt-3">
+                                            <Button variant="success" className="mr-5" onClick={() => this.submitCode()}>Submit</Button>
+                                        </Form.Row>
+                                    </Form.Group>
+                                )}
+                            </div>
+                        )}
+                        {this.state.venmoToken && (
+                            <div className="my-2">
+                                <h2 className="mt-2">Your Venmo account is linked!</h2>
+                                <Button onClick={() => this.unlinkVenmo()}>Unlink</Button>
+                            </div>
+                        )}
+                    </Col>
                 </Row>
                 <Row>
-                    venmo token: {this.state.venmoToken}
+                    <Col>
+                        venmo token: {this.state.venmoToken}
+                    </Col>
+                    <Col>
+                            <Button onClick={() => this.getProfile()}>Get Profile</Button>
+                    </Col>
                 </Row>
             </div>
         );
