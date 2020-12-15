@@ -142,6 +142,7 @@ export default class LoggedIn extends React.Component {
                     link: data.link,
                     description: data.description,
                     image: data.image,
+                    venmoToken: data.venmoToken,
                 });
             }
         });
