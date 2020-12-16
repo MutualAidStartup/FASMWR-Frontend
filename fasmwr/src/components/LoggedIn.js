@@ -7,6 +7,7 @@ import { flask_url } from '../App.js';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSync } from '@fortawesome/free-solid-svg-icons';
+import GrantOrDeny from './grantordeny.js'
 
 // Import bootstrap items
 import { Row, Col, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
@@ -25,6 +26,8 @@ export default class LoggedIn extends React.Component {
             image: "",
             requests: [],
             linked: null, //this will hold the auth tocken when not null, if null they are not verified.  On page load we will most likely need to check if the token is still valid by doing a redundant query with it then tossing the info
+            approvalOverlay: null,
+            requestedAmount: null,
             //VENMO
             venmoUsername: null,
             venmoPassword: null,
@@ -50,6 +53,7 @@ export default class LoggedIn extends React.Component {
         this.submitCode = this.submitCode.bind(this);
         this.unlinkVenmo = this.unlinkVenmo.bind(this);
         this.getProfile = this.getProfile.bind(this);
+        this.changeApproval = this.changeApproval.bind(this);
     }
 
     componentDidMount() {
@@ -105,12 +109,12 @@ export default class LoggedIn extends React.Component {
                                 {requestObj.amount}
                             </Col>
                             <Col>
-                                <Button type="grant_request" style={{ float: "right" }} variant="success">
+                                <Button type="grant_request" style={{ float: "right" }} onClick={()=>this.changeApproval(requestObj.id, "grant", requestObj.amount)} variant="success">
                                     Grant
                                 </Button>
                             </Col>
                             <Col>
-                                <Button type="deny_request" style={{ float: "right" }} variant="danger">
+                                <Button type="deny_request" style={{ float: "right" }} onClick={()=>this.changeApproval(requestObj.id, "deny", requestObj.amount)} variant="danger">
                                     Deny
                                 </Button>
                             </Col>
@@ -123,6 +127,16 @@ export default class LoggedIn extends React.Component {
                 console.log(this.state.requests);
             }
         });
+    }
+
+    changeApproval(id, state, amount)
+    {
+        console.log("changing approval, amount: "+amount)
+        this.setState({
+            approvalOverlay: state,
+            responseId: id,
+            requestedAmount: amount,
+        })
     }
 
     getAccountData(_token, id) {
@@ -352,6 +366,18 @@ export default class LoggedIn extends React.Component {
     render() {
         return (
             <div style={{ height: "100%" }}>
+                {/* This is the overlay viewed when confirming the grant or the deny 
+                 NOTE: Right now it looks weird when displaying but that is due to the debug row.
+                 Once the debug row is removed it should be flush with the nav bar like the requestoverlay
+                */}
+                {this.state.approvalOverlay && (
+                    <GrantOrDeny
+                        approved={this.state.approvalOverlay} // approvalOverlay holds the grant/deny string
+                        cancel={this.changeApproval}
+                        responseId={this.state.responseId}
+                        requestedAmount={this.state.requestedAmount}
+                    />
+                )}
                 <Row>
                     {this.props.page === "account" && (
                         <Col className="account-container ml-5">
