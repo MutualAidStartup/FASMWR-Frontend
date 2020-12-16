@@ -98,7 +98,7 @@ export default class LoggedIn extends React.Component {
                     var requestObj = data["request"][counter];
                     console.log(requestObj.situation);
                     requestsTemp.push(
-                        {id: requestObj.id, situation: requestObj.situation, identities: requestObj.identities, amount: requestObj.amount}
+                        { id: requestObj.id, situation: requestObj.situation, identities: requestObj.identities, amount: requestObj.amount }
                     );
                 }
                 this.setState({
@@ -108,8 +108,7 @@ export default class LoggedIn extends React.Component {
         });
     }
 
-    changeApproval(id, state, amount)
-    {
+    changeApproval(id, state, amount) {
         this.setState({
             approvalOverlay: state,
             responseId: id,
@@ -429,18 +428,18 @@ export default class LoggedIn extends React.Component {
                             <Row className="mx-5 my-3" >
                                 <Col>
                                     Situation
-                            </Col>
+                                </Col>
                                 <Col>
                                     Identities
-                            </Col>
+                                </Col>
                                 <Col>
                                     Requested Amount
-                            </Col>
-                                <Col sm={5} style={{ textAlign: "right" }}>
+                                </Col>
+                                <Col style={{ textAlign: "right" }}>
                                     Options
-                            </Col>
+                                </Col>
                             </Row>
-                            {this.state.requests.map(({id,situation,identities,amount}) => (
+                            {this.state.requests.map(({ id, situation, identities, amount }) => (
                                 <Row className="mx-5 my-3" style={{ backgroundColor: "#555555" }}>
                                     <Col>
                                         {situation}
@@ -452,12 +451,10 @@ export default class LoggedIn extends React.Component {
                                         {amount}
                                     </Col>
                                     <Col>
-                                        <Button type="grant_request" style={{ float: "right" }} onClick={()=>this.changeApproval(id, "grant", amount)} variant="success">
+                                        <Button type="grant_request" style={{ float: "right" }} onClick={() => this.changeApproval(id, "grant", amount)} variant="success">
                                             Grant
                                         </Button>
-                                    </Col>
-                                    <Col>
-                                        <Button type="deny_request" style={{ float: "right" }} onClick={()=>this.changeApproval(id, "deny", amount)} variant="danger">
+                                        <Button type="deny_request" style={{ float: "right" }} onClick={() => this.changeApproval(id, "deny", amount)} variant="danger">
                                             Deny
                                         </Button>
                                     </Col>
