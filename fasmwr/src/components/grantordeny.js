@@ -63,7 +63,7 @@ export default class GrantOrDeny extends React.Component {
                                 <Col>
                                     <Form.Row className="mx-0">
                                         <InputGroup>
-                                            <Form.Control id="AmountSlider" type="range" min={0.00} max={this.state.requestedAmount} step={0.01} defaultValue={0.00} onChange={()=>this.changeGranted()}/>
+                                            <Form.Control id="AmountSlider" type="range" min={0.00} max={this.state.requestedAmount} step={1} defaultValue={0.00} onChange={()=>this.changeGranted()}/>
                                             <InputGroup.Prepend>
                                                 <InputGroup.Text>$</InputGroup.Text>
                                             </InputGroup.Prepend>

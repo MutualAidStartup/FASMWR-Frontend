@@ -98,40 +98,18 @@ export default class LoggedIn extends React.Component {
                     var requestObj = data["request"][counter];
                     console.log(requestObj.situation);
                     requestsTemp.push(
-                        <Row className="mx-5 my-3" style={{ backgroundColor: "#555555" }}>
-                            <Col>
-                                {requestObj.situation}
-                            </Col>
-                            <Col>
-                                {requestObj.identities}
-                            </Col>
-                            <Col>
-                                {requestObj.amount}
-                            </Col>
-                            <Col>
-                                <Button type="grant_request" style={{ float: "right" }} onClick={()=>this.changeApproval(requestObj.id, "grant", requestObj.amount)} variant="success">
-                                    Grant
-                                </Button>
-                            </Col>
-                            <Col>
-                                <Button type="deny_request" style={{ float: "right" }} onClick={()=>this.changeApproval(requestObj.id, "deny", requestObj.amount)} variant="danger">
-                                    Deny
-                                </Button>
-                            </Col>
-                        </Row>
+                        {id: requestObj.id, situation: requestObj.situation, identities: requestObj.identities, amount: requestObj.amount}
                     );
                 }
                 this.setState({
                     requests: requestsTemp
                 })
-                console.log(this.state.requests);
             }
         });
     }
 
     changeApproval(id, state, amount)
     {
-        console.log("changing approval, amount: "+amount)
         this.setState({
             approvalOverlay: state,
             responseId: id,
@@ -462,7 +440,29 @@ export default class LoggedIn extends React.Component {
                                     Options
                             </Col>
                             </Row>
-                            {this.state.requests}
+                            {this.state.requests.map(({id,situation,identities,amount}) => (
+                                <Row className="mx-5 my-3" style={{ backgroundColor: "#555555" }}>
+                                    <Col>
+                                        {situation}
+                                    </Col>
+                                    <Col>
+                                        {identities}
+                                    </Col>
+                                    <Col>
+                                        {amount}
+                                    </Col>
+                                    <Col>
+                                        <Button type="grant_request" style={{ float: "right" }} onClick={()=>this.changeApproval(id, "grant", amount)} variant="success">
+                                            Grant
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button type="deny_request" style={{ float: "right" }} onClick={()=>this.changeApproval(id, "deny", amount)} variant="danger">
+                                            Deny
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            ))}
                             <Row />
                         </Col>
                     )}
