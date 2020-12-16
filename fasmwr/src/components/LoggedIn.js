@@ -450,11 +450,11 @@ export default class LoggedIn extends React.Component {
                                     <Col>
                                         {amount}
                                     </Col>
-                                    <Col>
-                                        <Button type="grant_request" style={{ float: "right" }} onClick={() => this.changeApproval(id, "grant", amount)} variant="success">
+                                    <Col style={{ textAlign: "right"}}>
+                                        <Button type="grant_request" onClick={() => this.changeApproval(id, "grant", amount)} variant="success">
                                             Grant
                                         </Button>
-                                        <Button type="deny_request" style={{ float: "right" }} onClick={() => this.changeApproval(id, "deny", amount)} variant="danger">
+                                        <Button type="deny_request" onClick={() => this.changeApproval(id, "deny", amount)} variant="danger">
                                             Deny
                                         </Button>
                                     </Col>
