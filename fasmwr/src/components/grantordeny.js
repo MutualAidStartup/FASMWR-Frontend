@@ -1,18 +1,23 @@
 import React from "react";
+import * as $ from 'jquery';
+import { flask_url } from '../App.js';
 import { Container, Row, Col, Card, Button, Form, InputGroup } from 'react-bootstrap';
 
 export default class GrantOrDeny extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.id,
+            token: this.props.token,
             approved: this.props.approved,
             requestedAmount: this.props.requestedAmount,
-            responseId: this.props.responseId
+            requestId: this.props.requestId
         }
-    }
-
-    componentDidMount() {
-        console.log(this.state.requestedAmount);
+        this.changeGranted = this.changeGranted.bind(this);
+        this.changeSlider = this.changeSlider.bind(this);
+        this.updateRequestAmount = this.updateRequestAmount.bind(this);
+        this.changeToMax = this.changeToMax.bind(this);
+        this.removeRequest = this.removeRequest.bind(this);
     }
 
     changeGranted() {
@@ -47,6 +52,28 @@ export default class GrantOrDeny extends React.Component {
         })
     }
 
+    removeRequest()
+    {
+        $.ajax({
+            url: flask_url + "removeRequest",
+            type: "GET",
+            data: {
+                'request_id': this.state.requestId,
+                'token': this.state.token,
+                'userId': this.state.id
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                console.log("Removed");
+                this.props.cancel(null,null,null);
+            }
+        })
+    }
+
     /* Forms - END */
     render() {
         return (
@@ -77,7 +104,7 @@ export default class GrantOrDeny extends React.Component {
                             </Row>
                             <Row className="mx-5 my-2">
                                 <Col>
-                                    <Button id="grant" onClick={() => this.props.grantAmount(Document.getElementById("grant").value)}>Grant</Button>
+                                    <Button id="grant" onClick={() => this.props.grantAmount(document.getElementById("grant").value)}>Grant</Button>
                                     <Button onClick={() => this.props.cancel(null)}>Cancel</Button>
                                 </Col>
                             </Row>
@@ -90,7 +117,7 @@ export default class GrantOrDeny extends React.Component {
                                     Are you sure you would like to <b style={{ color: 'red' }}>DENY</b> this request?
                                 </Col>
                                 <Col>
-                                    <Button>Yes</Button>
+                                    <Button onClick={() => this.removeRequest()}>Yes</Button>
                                     <Button onClick={() => this.props.cancel(null)}>No</Button>
                                 </Col>
                             </Card>

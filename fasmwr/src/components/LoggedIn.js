@@ -109,9 +109,14 @@ export default class LoggedIn extends React.Component {
     }
 
     changeApproval(id, state, amount) {
+        if(id===null)
+        {
+            this.getRequestData(this.props.id);
+        }
+        console.log("Changing state"+id+" state " + state);
         this.setState({
             approvalOverlay: state,
-            responseId: id,
+            requestId: id,
             requestedAmount: amount,
         })
     }
@@ -349,9 +354,11 @@ export default class LoggedIn extends React.Component {
                 */}
                 {this.state.approvalOverlay && (
                     <GrantOrDeny
+                        id={this.state.id}
+                        token={this.state.token}
                         approved={this.state.approvalOverlay} // approvalOverlay holds the grant/deny string
                         cancel={this.changeApproval}
-                        responseId={this.state.responseId}
+                        requestId={this.state.requestId}
                         requestedAmount={this.state.requestedAmount}
                     />
                 )}
