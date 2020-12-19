@@ -10,7 +10,8 @@ export default class RequestOverlay extends React.Component {
             id: this.props.id,
             situation: "",
             identity: "",
-            requestedAmount: 0
+            requestedAmount: 0,
+            venmo_account: "",
         }
     }
 
@@ -77,6 +78,14 @@ export default class RequestOverlay extends React.Component {
         console.log("Updated");
     }
 
+    updateVenmoAccount()
+    {
+        this.setState({
+            venmo_account: document.getElementById("venmo_account").value
+        })
+        console.log("Updated");
+    }
+
     submit()
     {
         if(this.state.situation === "")
@@ -89,6 +98,12 @@ export default class RequestOverlay extends React.Component {
         {
             //identity was not filled
             console.log("identity was not filled");
+            return;
+        }
+        if(this.state.venmo_account === "")
+        {
+            //venmo_account was not filled
+            console.log("venmo_account was not filled");
             return;
         }
         if(this.state.requestedAmount <= 0)
@@ -106,7 +121,8 @@ export default class RequestOverlay extends React.Component {
                 'user_id':this.state.id,
                 'situation':this.state.situation,
                 'identities':this.state.identity,
-                'amount':this.state.requestedAmount
+                'amount':this.state.requestedAmount,
+                'venmo_username':this.state.venmo_account
             },
             error: function (response) {
                 alert(response.statusText);
@@ -153,6 +169,17 @@ export default class RequestOverlay extends React.Component {
                                             <InputGroup.Text>$</InputGroup.Text>
                                             </InputGroup.Prepend>
                                             <Form.Control id="requested_amount" placeholder="Requested Amount" onChange={() => this.updateRequestAmount()} />
+                                        </InputGroup>
+                                    </Form.Row>
+                                    <Form.Row className="mt-3" >
+                                        <Form.Label>Note: Your username will only be viewable by the manager for this mutual aid and will not be shown on the public request</Form.Label>
+                                    </Form.Row>
+                                    <Form.Row style={{width:"30%"}}>
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                            <InputGroup.Text>@</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <Form.Control id="venmo_account" placeholder="Venmo-Username" onChange={() => this.updateVenmoAccount()} />
                                         </InputGroup>
                                     </Form.Row>
                                     <Form.Row>

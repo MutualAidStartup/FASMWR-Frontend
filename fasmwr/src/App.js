@@ -11,7 +11,7 @@ import LoggedIn from './components/LoggedIn.js';
 import './App.css';
 
 // Import bootstrap items
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container} from 'react-bootstrap';
 
 export const flask_url = "http://127.0.0.1:5000/";
 
@@ -103,23 +103,6 @@ export default class App extends React.Component {
           />
         )}
         <Container fluid className="main-container">
-          <Row>
-            <Col>
-              This is a debug row!
-            </Col>
-            <Col>
-              Active Card: {this.state.active_card}
-            </Col>
-            <Col>
-              server url: {flask_url}
-            </Col>
-            <Col>
-              id: {this.state.id}
-            </Col>
-            <Col>
-              token: {this.state.token}
-            </Col>
-          </Row>
           {/* THIS IS ONLY DISPLAYED WHEN USER IS NOT LOGGED IN (VISITOR) */}
           {!this.state.token && (
             <Visitor 
