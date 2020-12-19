@@ -6,11 +6,11 @@ import * as $ from 'jquery';
 import { flask_url } from '../App.js';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
+import { faSync, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import GrantOrDeny from './grantordeny.js'
 
 // Import bootstrap items
-import { Row, Col, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Row, Col, Button, Form, FormControl, InputGroup, Dropdown } from 'react-bootstrap';
 
 export default class LoggedIn extends React.Component {
     constructor(props) {
@@ -32,11 +32,17 @@ export default class LoggedIn extends React.Component {
             venmoUsername: null,
             venmoPassword: null,
             venmoToken: null,
-            two_factor: null,
+            two_factor_venmo: null,
             venmoCode: "",
             otp_secret: null,
             //VENMO PROFILE
-            balance: '00.00'
+            balance: '00.00',
+            //Instagram
+            two_factor_insta: null,
+            instaUsername: null,
+            instaPassword: null,
+            instaToken: null,
+            instaCode: "",
         }
         this.getAccountData = this.getAccountData.bind(this);
         this.updateName = this.updateName.bind(this);
@@ -47,13 +53,14 @@ export default class LoggedIn extends React.Component {
         this.updateImg = this.updateImg.bind(this);
         this.submit = this.submit.bind(this);
         this.loginVenmo = this.loginVenmo.bind(this);
-        this.updateUsername = this.updateUsername.bind(this);
-        this.updatePassword = this.updatePassword.bind(this);
-        this.updateCode = this.updateCode.bind(this);
-        this.submitCode = this.submitCode.bind(this);
+        this.updateVenmoUsername = this.updateVenmoUsername.bind(this);
+        this.updateVenmoPassword = this.updateVenmoPassword.bind(this);
+        this.updateVenmoCode = this.updateVenmoCode.bind(this);
+        this.submitVenmoCode = this.submitVenmoCode.bind(this);
         this.unlinkVenmo = this.unlinkVenmo.bind(this);
         this.getProfile = this.getProfile.bind(this);
         this.changeApproval = this.changeApproval.bind(this);
+        this.showSecurityDisclaimer = this.showSecurityDisclaimer.bind(this);
     }
 
     componentDidMount() {
@@ -98,7 +105,7 @@ export default class LoggedIn extends React.Component {
                     var requestObj = data["request"][counter];
                     console.log(requestObj.situation);
                     requestsTemp.push(
-                        { id: requestObj.id, situation: requestObj.situation, identities: requestObj.identities, amount: requestObj.amount }
+                        { id: requestObj.id, situation: requestObj.situation, identities: requestObj.identities, amount: requestObj.amount, venmo_account: requestObj.venmo_account }
                     );
                 }
                 this.setState({
@@ -221,16 +228,16 @@ export default class LoggedIn extends React.Component {
         });
     }
 
-    updateUsername() {
+    updateVenmoUsername() {
         this.setState({
-            venmoUsername: document.getElementById("username").value,
+            venmoUsername: document.getElementById("venmo_username").value,
         });
         console.log("Updated");
     }
 
-    updatePassword() {
+    updateVenmoPassword() {
         this.setState({
-            venmoPassword: document.getElementById("password").value,
+            venmoPassword: document.getElementById("venmo_password").value,
         });
         console.log("Updated");
     }
@@ -256,21 +263,21 @@ export default class LoggedIn extends React.Component {
                 console.log("Successful verification return");
                 this.setState({
                     venmoToken: data.token,
-                    two_factor: data.two_factor,
+                    two_factor_venmo: data.two_factor,
                     otp_secret: data.otp_secret
                 });
             }
         })
     }
 
-    updateCode() {
+    updateVenmoCode() {
         this.setState({
-            venmoCode: document.getElementById("code").value,
+            venmoCode: document.getElementById("venmo_code").value,
         });
         console.log("Updated");
     }
 
-    submitCode() {
+    submitVenmoCode() {
         console.log("Verifying code");
         $.ajax({
             url: flask_url + "verifyVenmoCode",
@@ -343,6 +350,118 @@ export default class LoggedIn extends React.Component {
                 })
             }
         });
+    }
+
+    // Instagram API
+
+    updateInstaUsername() {
+        this.setState({
+            instaUsername: document.getElementById("insta_username").value,
+        });
+        console.log("Updated");
+    }
+
+    updateInstaPassword() {
+        this.setState({
+            instaPassword: document.getElementById("insta_password").value,
+        });
+        console.log("Updated");
+    }
+
+    loginInsta() {
+        console.log("Attempting Instagram Verification");
+        $.ajax({
+            url: flask_url + "verifyInstaAcc",
+            type: "GET",
+            data: {
+                'username': this.state.instaUsername,
+                'password': this.state.instaPassword,
+                'token': this.state.token,
+                'userId': this.state.id
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                console.log(data);
+                console.log("Successful verification return");
+                this.setState({
+                    instaToken: data.token,
+                    two_factor_insta: data.two_factor,
+                    otp_secret_insta: data.otp_secret
+                });
+            }
+        })
+    }
+
+    updateInstaCode() {
+        this.setState({
+            venmoCode: document.getElementById("venmo_code").value,
+        });
+        console.log("Updated");
+    }
+
+    submitInstaCode() {
+        console.log("Verifying code");
+        $.ajax({
+            url: flask_url + "verifyVenmoCode",
+            type: "GET",
+            data: {
+                'token': this.state.token,
+                'userId': this.state.id,
+                'code': this.state.venmoCode,
+                'otp_secret': this.state.otp_secret
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                console.log(data);
+                console.log("Successful verification return");
+                this.setState({
+                    venmoToken: data.token
+                });
+            }
+        })
+    }
+
+    unlinkInsta() {
+        this.setState({
+            venmoToken: null,
+            two_factor: null,
+        });
+        $.ajax({
+            url: flask_url + "venmoLogOut",
+            type: "GET",
+            data: {
+                'token': this.state.token,
+                'userId': this.state.id,
+                'code': this.state.venmoToken,
+            },
+            error: function (response) {
+                alert(response.statusText);
+                console.log(response.statusText);
+                console.log("failed");
+            },
+            success: (data) => {
+                console.log(data);
+                console.log("Successful verification return");
+            }
+        });
+    }
+    
+    showSecurityDisclaimer() {
+        console.log("displaying disclaimer");
+        var dropdown = document.getElementById("security_disclaimer");
+        console.log(dropdown.style.display);
+        if(dropdown.style.display === "none")
+            dropdown.style.display = "block";
+        else
+            dropdown.style.display = "none";
     }
 
     render() {
@@ -433,6 +552,9 @@ export default class LoggedIn extends React.Component {
                             </Row>
                             {/* Example request */}
                             <Row className="mx-5 my-3" >
+                                <Col sm={1}>
+                                    ID
+                                </Col>
                                 <Col>
                                     Situation
                                 </Col>
@@ -442,12 +564,18 @@ export default class LoggedIn extends React.Component {
                                 <Col>
                                     Requested Amount
                                 </Col>
+                                <Col>
+                                    @Venmo Account
+                                </Col>
                                 <Col style={{ textAlign: "right" }}>
                                     Options
                                 </Col>
                             </Row>
-                            {this.state.requests.map(({ id, situation, identities, amount }) => (
+                            {this.state.requests.map(({ id, situation, identities, amount, venmo_account }) => (
                                 <Row className="mx-5 my-3" style={{ backgroundColor: "#555555" }}>
+                                    <Col sm={1}>
+                                        {id}
+                                    </Col>
                                     <Col>
                                         {situation}
                                     </Col>
@@ -456,6 +584,9 @@ export default class LoggedIn extends React.Component {
                                     </Col>
                                     <Col>
                                         {amount}
+                                    </Col>
+                                    <Col>
+                                        @{venmo_account}
                                     </Col>
                                     <Col style={{ textAlign: "right"}}>
                                         <Button type="grant_request" onClick={() => this.changeApproval(id, "grant", amount)} variant="success">
@@ -471,32 +602,44 @@ export default class LoggedIn extends React.Component {
                         </Col>
                     )}
                     <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
+                        <Button onClick={()=> this.showSecurityDisclaimer()}><FontAwesomeIcon icon={faExclamationCircle} className="mt-2"/></Button>
+                        <div id="security_disclaimer" style={{display: "none", backgroundColor: "#696969"}}>
+                                Please Note: Although we do not save your login information, we do keep track of the temporary token for your account.
+                                Please do not use your personal account and only use the account for your mutual aid in the unlikely case of a security
+                                breach.  We also reccomend unlinking and relinking your account once a month as this will destroy the previous token and 
+                                create a new one.
+                                <br/>
+                                Thank you,
+                                <br/>
+                                fasmwr dev team
+                        </div>
+                        {/* Venmo */}
                         {!this.state.venmoToken && (
                             <div>
                                 <h2 className="mt-2">Link your Venmo Account</h2>
-                                {!this.state.two_factor && (
+                                {!this.state.two_factor_venmo && (
                                     <Form.Group className="mx-2">
                                         <Form.Row style={{ width: "60%" }}>
                                             <Form.Label>Email Address</Form.Label>
-                                            <FormControl id="username" placeholder="Email Address" onChange={() => this.updateUsername()} />
+                                            <FormControl id="venmo_username" placeholder="Email Address" onChange={() => this.updateVenmoUsername()} />
                                         </Form.Row>
                                         <Form.Row style={{ width: "60%" }} className="mt-2">
                                             <Form.Label>Password</Form.Label>
-                                            <FormControl id="password" type="password" placeholder="Password" onChange={() => this.updatePassword()} />
+                                            <FormControl id="venmo_password" type="password" placeholder="Password" onChange={() => this.updateVenmoPassword()} />
                                         </Form.Row>
                                         <Form.Row style={{ width: "60%" }} className="mt-3">
                                             <Button variant="success" className="mr-5" onClick={() => this.loginVenmo()}>Login</Button>
                                         </Form.Row>
                                     </Form.Group>
                                 )}
-                                {this.state.two_factor && (
+                                {this.state.two_factor_venmo && (
                                     <Form.Group className="mx-2">
                                         <Form.Row style={{ width: "60%" }}>
                                             <Form.Label>Enter the code sent to your phone</Form.Label>
-                                            <FormControl id="code" placeholder="Code" onChange={() => this.updateCode()} />
+                                            <FormControl id="venmo_code" placeholder="Code" onChange={() => this.updateVenmoCode()} />
                                         </Form.Row>
                                         <Form.Row style={{ width: "60%" }} className="mt-3">
-                                            <Button variant="success" className="mr-5" onClick={() => this.submitCode()}>Submit</Button>
+                                            <Button variant="success" className="mr-5" onClick={() => this.submitVenmoCode()}>Submit</Button>
                                         </Form.Row>
                                     </Form.Group>
                                 )}
@@ -508,11 +651,52 @@ export default class LoggedIn extends React.Component {
                                 <Button onClick={() => this.unlinkVenmo()}>Unlink</Button>
                             </div>
                         )}
+                        {/* Instagram */}
+                        {!this.state.instaToken && (
+                            <div>
+                                <h2 className="mt-2">Link your Instagram Account [WIP]</h2>
+                                {!this.state.two_factor && (
+                                    <Form.Group className="mx-2">
+                                        <Form.Row style={{ width: "60%" }}>
+                                            <Form.Label>Email Address</Form.Label>
+                                            <FormControl id="insta_username" placeholder="Email Address" onChange={() => this.updateInstaUsername()} />
+                                        </Form.Row>
+                                        <Form.Row style={{ width: "60%" }} className="mt-2">
+                                            <Form.Label>Password</Form.Label>
+                                            <FormControl id="insta_password" type="password" placeholder="Password" onChange={() => this.updateInstaPassword()} />
+                                        </Form.Row>
+                                        <Form.Row style={{ width: "60%" }} className="mt-3">
+                                            <Button variant="success" className="mr-5" onClick={() => this.loginInsta()}>Login</Button>
+                                        </Form.Row>
+                                    </Form.Group>
+                                )}
+                                {this.state.two_factor && (
+                                    <Form.Group className="mx-2">
+                                        <Form.Row style={{ width: "60%" }}>
+                                            <Form.Label>Enter the code sent to your phone</Form.Label>
+                                            <FormControl id="code" placeholder="Code" onChange={() => this.updateInstaCode()} />
+                                        </Form.Row>
+                                        <Form.Row style={{ width: "60%" }} className="mt-3">
+                                            <Button variant="success" className="mr-5" onClick={() => this.submitInstaCode()}>Submit</Button>
+                                        </Form.Row>
+                                    </Form.Group>
+                                )}
+                            </div>
+                        )}
+                        {this.state.instaToken && (
+                            <div className="my-2">
+                                <h2 className="mt-2">Your Instagram account is linked!</h2>
+                                <Button onClick={() => this.unlinkInsta()}>Unlink</Button>
+                            </div>
+                        )}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
                         venmo token: {this.state.venmoToken}
+                    </Col>
+                    <Col>
+                        instagram token: {this.state.instaToken}
                     </Col>
                 </Row>
             </div>
