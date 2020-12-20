@@ -13,7 +13,7 @@ import './App.css';
 // Import bootstrap items
 import {Container} from 'react-bootstrap';
 
-export const flask_url = "http://127.0.0.1:5000/";
+export const flask_url = "https://fasmwr.herokuapp.com/";
 
 export default class App extends React.Component {
   constructor() {
