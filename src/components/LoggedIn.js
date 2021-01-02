@@ -689,6 +689,17 @@ export default class LoggedIn extends React.Component {
                                 <Button onClick={() => this.unlinkInsta()}>Unlink</Button>
                             </div>
                         )}
+<<<<<<< HEAD:src/components/LoggedIn.js
+=======
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        venmo token: {this.state.venmoToken}
+>>>>>>> added venmo account username inclusion:fasmwr/src/components/LoggedIn.js
+                    </Col>
+                    <Col>
+                        instagram token: {this.state.instaToken}
                     </Col>
                 </Row>
             </div>
