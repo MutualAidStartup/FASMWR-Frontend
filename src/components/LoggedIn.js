@@ -116,11 +116,10 @@ export default class LoggedIn extends React.Component {
     }
 
     changeApproval(id, state, amount) {
-        if(id===null)
-        {
+        if (id === null) {
             this.getRequestData(this.props.id);
         }
-        console.log("Changing state"+id+" state " + state);
+        console.log("Changing state" + id + " state " + state);
         this.setState({
             approvalOverlay: state,
             requestId: id,
@@ -453,12 +452,12 @@ export default class LoggedIn extends React.Component {
             }
         });
     }
-    
+
     showSecurityDisclaimer() {
         console.log("displaying disclaimer");
         var dropdown = document.getElementById("security_disclaimer");
         console.log(dropdown.style.display);
-        if(dropdown.style.display === "none")
+        if (dropdown.style.display === "none")
             dropdown.style.display = "block";
         else
             dropdown.style.display = "none";
@@ -588,7 +587,7 @@ export default class LoggedIn extends React.Component {
                                     <Col>
                                         @{venmo_account}
                                     </Col>
-                                    <Col style={{ textAlign: "right"}}>
+                                    <Col style={{ textAlign: "right" }}>
                                         <Button type="grant_request" onClick={() => this.changeApproval(id, "grant", amount)} variant="success">
                                             Grant
                                         </Button>
@@ -602,15 +601,15 @@ export default class LoggedIn extends React.Component {
                         </Col>
                     )}
                     <Col sm={2} className="account-container-venmo mx-5" style={{ float: "right" }}>
-                        <Button onClick={()=> this.showSecurityDisclaimer()}><FontAwesomeIcon icon={faExclamationCircle} className="mt-2"/></Button>
-                        <div id="security_disclaimer" style={{display: "none", backgroundColor: "#696969"}}>
-                                Please Note: Although we do not save your login information, we do keep track of the temporary token for your account.
-                                Please do not use your personal account and only use the account for your mutual aid in the unlikely case of a security
-                                breach.  We also reccomend unlinking and relinking your account once a month as this will destroy the previous token and 
-                                create a new one.
-                                <br/>
+                        <Button onClick={() => this.showSecurityDisclaimer()}><FontAwesomeIcon icon={faExclamationCircle} className="mt-2" /></Button>
+                        <div id="security_disclaimer" style={{ display: "none", backgroundColor: "#696969" }}>
+                            Please Note: Although we do not save your login information, we do keep track of the temporary token for your account.
+                            Please do not use your personal account and only use the account for your mutual aid in the unlikely case of a security
+                            breach.  We also reccomend unlinking and relinking your account once a month as this will destroy the previous token and
+                            create a new one.
+                                <br />
                                 Thank you,
-                                <br/>
+                                <br />
                                 fasmwr dev team
                         </div>
                         {/* Venmo */}
@@ -689,17 +688,6 @@ export default class LoggedIn extends React.Component {
                                 <Button onClick={() => this.unlinkInsta()}>Unlink</Button>
                             </div>
                         )}
-<<<<<<< HEAD:src/components/LoggedIn.js
-=======
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        venmo token: {this.state.venmoToken}
->>>>>>> added venmo account username inclusion:fasmwr/src/components/LoggedIn.js
-                    </Col>
-                    <Col>
-                        instagram token: {this.state.instaToken}
                     </Col>
                 </Row>
             </div>
